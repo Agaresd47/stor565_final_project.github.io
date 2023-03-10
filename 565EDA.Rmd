@@ -1,0 +1,107 @@
+---
+author: "Yu Chen, Zifei Dong, Ning Pan, Sifan Tao, Yao Yao"
+title: "565 Final Project House Price EDA"
+date: "2023-03-07"
+output: html_document
+---
+
+
+House Prices Prediction
+===
+
+We take will use the [House Prices](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data) data from Kaggle. The measured variables can be seen [here](https://github.com/Agaresd47/House_Price_Prediction/blob/main/house-prices-advanced-regression-techniques/Data%20Description.pdf)
+```{r, eval=TRUE, include= FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load the required library
+library(ggplot2)
+library(dplyr)
+library(corrplot)
+```
+
+
+
+
+Exploratory data analysis：
+===
+
+```{r}
+# Read the train.csv file into a data frame
+house_prices <- read.csv("train.csv", header = TRUE, stringsAsFactors = FALSE)
+
+dim(house_prices)
+```
+
+
+```{r}
+head(house_prices)
+```
+
+
+
+
+Distributions of prostate cancer variables
+===
+```{r}
+# Get a vector of variable names that are numeric
+numeric_vars <- names(house_prices)[sapply(house_prices, is.numeric)]
+
+# Setup grid and margins for plotting
+par(mfrow=c(3, 3), mar=c(4, 4, 2, 0.5))
+
+# Loop through each numeric variable and plot its distribution
+for (j in 1:length(numeric_vars)) {
+  hist(house_prices[, numeric_vars[j]], xlab=numeric_vars[j],
+       main=paste("Histogram of", numeric_vars[j]),
+       col="lightblue", breaks=20)
+}
+```
+
+It is apparent that the majority of data has a strong skew and pattern. 
+
+Correlations between House Price variables
+===
+
+```{r, include= FALSE}
+
+house_prices_new= select_if(house_prices, is.numeric)
+house_prices_new=subset(house_prices_new,select = -c(LotFrontage,MasVnrArea,GarageYrBlt) )
+house_prices.cor = cor(house_prices_new)
+round(house_prices.cor,3)
+```
+
+
+```{r}
+
+corrplot(cor(house_prices_new[c(1:15)]), type = "full")
+corrplot(cor(house_prices_new[c(15:35)]), type = "full")
+```
+
+The majority of variables have a moderate relationship between each other. 
+
+
+Visualizing Relationships Among Variables
+===
+
+```{r}
+names(house_prices)[sapply(house_prices, is.numeric)]
+```
+
+
+```{r}
+#Sale price and General housing information
+pairs(~ SalePrice+LotFrontage+LotArea+YearBuilt+YearRemodAdd+GrLivArea, data=house_prices)
+
+#Sale price and Major surface areas
+pairs(~ SalePrice+TotalBsmtSF+X1stFlrSF+X2ndFlrSF+TotRmsAbvGrd+GarageArea, data=house_prices)
+
+#Sale price and Basement and "Add-on" areas 
+pairs(~ SalePrice+BsmtUnfSF+TotalBsmtSF+GarageArea+WoodDeckSF+OpenPorchSF, data=house_prices)
+
+```
+
+We excluded Variables due to their insignificant information and fixed scales that graphs cannot represent: 
+
+OverallQual, OverallCond, BsmtFinSF1, BsmtFinSF2, MSSubClass, LowQualFinSF, BsmtFullBath, BsmtHalfBath, FullBath, HalfBath, BedroomAbvGr, KitchenAbvGr, Fireplaces, GarageYrBlt, GarageCars, EnclosedPorch, X3SsnPorch, ScreenPorch, PoolArea, MiscVal, MoSold, YrSold
+
+
+
