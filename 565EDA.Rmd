@@ -9,7 +9,7 @@ output: html_document
 House Prices Prediction
 ===
 
-We take will use the [House Prices](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data) data from Kaggle. The measured variables can be seen [here](https://github.com/Agaresd47/House_Price_Prediction/blob/main/house-prices-advanced-regression-techniques/Data%20Description.pdf)
+We take will use the [House Prices](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data) data from Kaggle. The measured variables can be seen [here](https://agaresd47.github.io/stor565_final_project.github.io/House%20Price%20Prediction/Data%20Description.pdf)
 ```{r, eval=TRUE, include= FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Load the required library
