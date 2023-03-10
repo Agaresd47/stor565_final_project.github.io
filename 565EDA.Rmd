@@ -104,4 +104,28 @@ We excluded Variables due to their insignificant information and fixed scales th
 OverallQual, OverallCond, BsmtFinSF1, BsmtFinSF2, MSSubClass, LowQualFinSF, BsmtFullBath, BsmtHalfBath, FullBath, HalfBath, BedroomAbvGr, KitchenAbvGr, Fireplaces, GarageYrBlt, GarageCars, EnclosedPorch, X3SsnPorch, ScreenPorch, PoolArea, MiscVal, MoSold, YrSold
 
 
+Inspecting relationships over a subset of the observations
+===
+
+The majority of variable are evenly distributed and there are only little variables has binary options. For example, 2ndFlrSF can be 0, which indicates the house does not have a second floor. Some house does not have garage, so the area of garage is also 0. Thus, we subset them out and investigate in the rest of data, which contains seocnd floor and a garage. 
+
+```{r}
+house_prices_subset = house_prices[house_prices$X2ndFlrSF > 0,]
+house_prices_subset = house_prices_subset[house_prices_subset$GarageArea > 0,]
+nrow(house_prices_subset)
+nrow(house_prices) - nrow(house_prices_subset)
+
+#Sale price and General housing information
+pairs(~ SalePrice+LotFrontage+LotArea+YearBuilt+YearRemodAdd+GrLivArea, data=house_prices_subset)
+
+#Sale price and Major surface areas
+pairs(~ SalePrice+TotalBsmtSF+X1stFlrSF+X2ndFlrSF+TotRmsAbvGrd+GarageArea, data=house_prices_subset)
+
+#Sale price and Basement and "Add-on" areas 
+pairs(~ SalePrice+BsmtUnfSF+TotalBsmtSF+GarageArea+WoodDeckSF+OpenPorchSF, data=house_prices_subset)
+```
+
+
+The general shape is constant comparing with previous one, with half data out, which also proves the evenly distribution of the data.
+
 
